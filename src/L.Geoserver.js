@@ -8,6 +8,7 @@ L.Geoserver = L.Class.extend({
     version: "1.1.0",
     srsname: "EPSG:4326",
     attribution: `layer`,
+    fitlayer: true,
   },
 
   initialize: function (baseLayerUrl, options) {
@@ -37,6 +38,18 @@ L.Geoserver = L.Class.extend({
       jsonp: "format_options",
     });
   },
+
+  handleJson: function (data) {
+    selectedArea = L.geoJson(data, {
+      onEachFeature: function (feature, layer) {
+        layer;
+      },
+    }).addTo(map);
+
+    if (this.fitlayer) {
+      map.fitBounds(selectedArea.getBounds());
+    }
+  },
 });
 
 L.Geoserver.wms = function (baseLayerUrl, options) {
@@ -55,7 +68,9 @@ function handleJson(data) {
       layer;
     },
   }).addTo(map);
-  map.fitBounds(selectedArea.getBounds());
+  if (this.fitlayer) {
+    map.fitBounds(selectedArea.getBounds());
+  }
 }
 
 // // ajax request handler

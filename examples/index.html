@@ -56,7 +56,8 @@
 
   L.Geoserver.wfs("http://203.159.29.40:8080/geoserver/tajikistan/wms", {
     layers: `tajikistan:jamoat`,
-  }).addTo(map);
+    fitlayer: false,
+  });
   //   a.wms().addTo(map);
 
   //   var a = new Geoserver("http://203.159.29.40:8080/geoserver/tajikistan/wms", {
