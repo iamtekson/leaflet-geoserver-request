@@ -1,4 +1,4 @@
-L.Geoserver = L.Class.extend({
+L.Geoserver = L.FeatureGroup.extend({
   options: {
     layers: `tajikistan:EAR_Agriculture`,
     format: "image/png",
@@ -9,11 +9,20 @@ L.Geoserver = L.Class.extend({
     srsname: "EPSG:4326",
     attribution: `layer`,
     fitlayer: true,
+    popup: true,
+    style: "",
   },
 
   initialize: function (baseLayerUrl, options) {
     this.baseLayerUrl = baseLayerUrl;
-    L.Util.setOptions(this, options);
+
+    L.setOptions(this, options);
+
+    this._layers = {};
+
+    this.state = {
+      exist: "exist",
+    };
   },
 
   wms: function () {
@@ -21,9 +30,12 @@ L.Geoserver = L.Class.extend({
   },
 
   wfs: function () {
+    var that = this;
+
     //Geoserver Web Feature Service
     $.ajax(this.baseLayerUrl, {
       type: "GET",
+
       data: {
         service: "WFS",
         version: "1.1.0",
@@ -32,24 +44,69 @@ L.Geoserver = L.Class.extend({
         CQL_FILTER: this.options.CQL_FILTER,
         srsname: this.options.srsname,
         outputFormat: "text/javascript",
+        format_options: "callback: getJson",
       },
+
       dataType: "jsonp",
-      jsonpCallback: "callback:handleJson",
-      jsonp: "format_options",
-    });
-  },
+      jsonpCallback: "getJson",
+      success: function (data) {
+        var layers = [];
 
-  handleJson: function (data) {
-    selectedArea = L.geoJson(data, {
-      onEachFeature: function (feature, layer) {
-        layer;
+        for (i = 0; i < data.features.length; i++) {
+          var layer = L.GeoJSON.geometryToLayer(
+            data.features[i],
+            that.options || null
+          );
+
+          layer.feature = data.features[i];
+          layers.push(layer);
+        }
+
+        if (typeof that.options.style === "function") {
+          for (i = 0; i < layers.length; i++) {
+            that.addLayer(layers[i]);
+            if (i.setStyle) {
+              i.setStyle(that.options.style(element));
+            }
+          }
+        } else {
+          for (i = 0; i < layers.length; i++) {
+            that.addLayer(layers[i]);
+            that.setStyle(that.options.style);
+          }
+        }
       },
-    }).addTo(map);
+    }).fail(function (jqXHR, textStatus, error) {
+      console.log(jqXHR, textStatus, error);
+    });
 
-    if (this.fitlayer) {
-      map.fitBounds(selectedArea.getBounds());
-    }
+    return that;
   },
+
+  // handleJson: function (data) {
+  //   console.log(data);
+  //   var layer = this.options.popup
+  //     ? L.geoJson(data, {
+  //         style: this.options.style,
+  //         onEachFeature: function (feature, layer) {
+  //           layer.bindPopup(
+  //             "<pre>" +
+  //               JSON.stringify(feature.properties, null, " ").replace(
+  //                 /[\{\}"]/g,
+  //                 ""
+  //               ) +
+  //               "</pre>"
+  //           );
+  //         },
+  //       })
+  //     : L.geoJson(data);
+
+  //   console.log(layer);
+  //   layer.addTo(map1);
+  //   if (this.options.fitlayer) {
+  //     map.fitBounds(this.selectedArea.getBounds());
+  //   }
+  // },
 });
 
 L.Geoserver.wms = function (baseLayerUrl, options) {
@@ -61,118 +118,3 @@ L.Geoserver.wfs = function (baseLayerUrl, options) {
   var req = new L.Geoserver(baseLayerUrl, options);
   return req.wfs();
 };
-
-function handleJson(data) {
-  selectedArea = L.geoJson(data, {
-    onEachFeature: function (feature, layer) {
-      layer;
-    },
-  }).addTo(map);
-  if (this.fitlayer) {
-    map.fitBounds(selectedArea.getBounds());
-  }
-}
-
-// // ajax request handler
-// function handleAjax(column, value, adminUnit = "jamoat") {
-//   //Geoserver Web Feature Service
-//   $.ajax("http://203.159.29.40:8080/geoserver/wfs", {
-//     type: "GET",
-//     data: {
-//       service: "WFS",
-//       version: "1.1.0",
-//       request: "GetFeature",
-//       typename: `tajikistan:${adminUnit}`,
-//       CQL_FILTER: `${column}='${value}'`,
-//       srsname: "EPSG:4326",
-//       outputFormat: "text/javascript",
-//     },
-//     dataType: "jsonp",
-//     jsonpCallback: "callback:handleJson",
-//     jsonp: "format_options",
-//   });
-// }
-
-// // the ajax callback function
-// function handleJson(data) {
-//   selectedArea = L.geoJson(data, {
-//     style: geoJsonStyle,
-//     onEachFeature: function (feature, layer) {
-//       population = feature.properties.population;
-//       shapeLength = feature.properties.shape_leng;
-//       layer.bindPopup(
-//         `Region: ${feature.properties.name_rg} </br>District: ${feature.properties.district_eng} </br> Jamoat: ${feature.properties.jamoat_eng} <br/> Population: ${feature.properties.population}`
-//       );
-//     },
-//   }).addTo(map);
-//   map.fitBounds(selectedArea.getBounds());
-//   // tryChart(population, shapeLength);
-// }
-
-// class Geoserver {
-//   defaultValues = {
-//     format: "image/png",
-//     transparent: true,
-//     zIndex: 1000,
-//     attribution: `${this.layers} layer`,
-//   };
-
-//   constructor(baseLayerUrl, options) {
-//     Object.assign(this, defaultValues, options);
-//     this.baseLayerUrl = baseLayerUrl;
-//     this.layers = options.layer;
-//     this.format = options.format;
-//     this.transparent = options.transparent;
-//     this.zIndex = options.zIndex;
-//     this.attribution = options.attribution;
-//   }
-
-//   wms() {
-//     return L.tileLayer.wms(this.baseLayerUrl, options);
-//   }
-// }
-
-// class MyMap {
-
-//     // constructor(props) {
-//     //  ...
-//     // }
-
-//     // getMapElement(){
-//     //  ...
-//     // }
-
-//     // getBaseLayer(){
-//     //  ...
-//     // }
-
-//     initMap( mapOptions ){
-//         if ( ! this.map  ) {
-//             this.map = L.map( this.getMapElement(), mapOptions );
-//             this.getBaseLayer().addTo( this.map );
-//         }
-//     }
-
-//     setMapOptions( newMapOptions ){
-//         // loop newMapOptions object
-//         for ( let newMapOptionKey in newMapOptions ) {
-//             if( newMapOptions.hasOwnProperty(newMapOptionKey)) {
-//                 this.setMapOption( newMapOptionKey, newMapOptions[newMapOptionKey] );
-//             }
-//         }
-//     }
-
-//     setMapOption( newMapOptionKey, newMapOptionVal ){
-//         // set map option
-//         L.Util.setOptions( this.map, {[newMapOptionKey]: newMapOptionVal});
-//         // apply option to handler
-//         if ( this.map[newMapOptionKey] instanceof L.Handler ) {
-//             if ( newMapOptionVal ) {
-//                 this.map[newMapOptionKey].enable();
-//             } else {
-//                 this.map[newMapOptionKey].disable();
-//             }
-//         }
-//     }
-
-// }

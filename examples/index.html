@@ -29,7 +29,7 @@
 <script src="../src/L.Geoserver.js"></script>
 
 <script>
-  var map = L.map("map").setView([38.861, 71.2761], 7);
+  var map1 = L.map("map").setView([38.861, 71.2761], 7);
   var osmLayer = L.tileLayer(
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     {
@@ -48,27 +48,19 @@
     attribution: `layer`,
   };
 
-  osmLayer.addTo(map);
+  osmLayer.addTo(map1);
 
-  L.Geoserver.wms("http://203.159.29.40:8080/geoserver/tajikistan/wms", {
+  a = L.Geoserver.wms("http://203.159.29.40:8080/geoserver/tajikistan/wms", {
     layers: `tajikistan:EAR_Road`,
-  }).addTo(map);
+  }).addTo(map1);
 
-  L.Geoserver.wfs("http://203.159.29.40:8080/geoserver/tajikistan/wms", {
+  a = L.Geoserver.wfs("http://203.159.29.40:8080/geoserver/tajikistan/wms", {
     layers: `tajikistan:jamoat`,
-    fitlayer: false,
-  });
-  //   a.wms().addTo(map);
-
-  //   var a = new Geoserver("http://203.159.29.40:8080/geoserver/tajikistan/wms", {
-  //     layers: `tajikistan:EAR_Agriculture`,
-  //     format: "image/png",
-  //     transparent: true,
-  //     zIndex: 1000,
-  //     version: "1.1.0",
-  //     attribution: `layer`,
-  //   });
-
-  //   console.log(a.wms());
-  //   a.wms().addTo(map);
+    // popup: false,
+    style: { color: "black" },
+    // onEachLayer: function (feature, layer) {
+    //   layer.bindPopup("this is popuped");
+    // },
+    // fitlayer: false,
+  }).addTo(map1);
 </script>
