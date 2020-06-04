@@ -1,6 +1,6 @@
 L.Geoserver = L.FeatureGroup.extend({
   options: {
-    layers: `tajikistan:EAR_Agriculture`,
+    layers: "",
     format: "image/png",
     transparent: true,
     CQL_FILTER: "INCLUDE",
@@ -83,30 +83,20 @@ L.Geoserver = L.FeatureGroup.extend({
     return that;
   },
 
-  // handleJson: function (data) {
-  //   console.log(data);
-  //   var layer = this.options.popup
-  //     ? L.geoJson(data, {
-  //         style: this.options.style,
-  //         onEachFeature: function (feature, layer) {
-  //           layer.bindPopup(
-  //             "<pre>" +
-  //               JSON.stringify(feature.properties, null, " ").replace(
-  //                 /[\{\}"]/g,
-  //                 ""
-  //               ) +
-  //               "</pre>"
-  //           );
-  //         },
-  //       })
-  //     : L.geoJson(data);
-
-  //   console.log(layer);
-  //   layer.addTo(map1);
-  //   if (this.options.fitlayer) {
-  //     map.fitBounds(this.selectedArea.getBounds());
-  //   }
-  // },
+  legend: function () {
+    var that = this;
+    var legend = L.control({ position: "bottomleft" });
+    legend.onAdd = function (map) {
+      var div = L.DomUtil.create("div", "info Legend");
+      var url = `${that.baseLayerUrl}/wms?REQUEST=GetLegendGraphic&VERSION=1.1.0&FORMAT=image/png&LAYER=${that.options.layers}&style=${that.options.style}`;
+      div.innerHTML +=
+        "<img src=" +
+        url +
+        ' alt="legend" data-toggle="tooltip" title="Map legend">';
+      return div;
+    };
+    return legend;
+  },
 });
 
 L.Geoserver.wms = function (baseLayerUrl, options) {
@@ -118,3 +108,33 @@ L.Geoserver.wfs = function (baseLayerUrl, options) {
   var req = new L.Geoserver(baseLayerUrl, options);
   return req.wfs();
 };
+
+L.Geoserver.legend = function (baseLayerUrl, options) {
+  var req = new L.Geoserver(baseLayerUrl, options);
+  return req.legend();
+};
+
+// handleJson: function (data) {
+//   console.log(data);
+//   var layer = this.options.popup
+//     ? L.geoJson(data, {
+//         style: this.options.style,
+//         onEachFeature: function (feature, layer) {
+//           layer.bindPopup(
+//             "<pre>" +
+//               JSON.stringify(feature.properties, null, " ").replace(
+//                 /[\{\}"]/g,
+//                 ""
+//               ) +
+//               "</pre>"
+//           );
+//         },
+//       })
+//     : L.geoJson(data);
+
+//   console.log(layer);
+//   layer.addTo(map1);
+//   if (this.options.fitlayer) {
+//     map.fitBounds(this.selectedArea.getBounds());
+//   }
+// },
