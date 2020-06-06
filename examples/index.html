@@ -23,6 +23,8 @@
   </head>
   <body>
     <div id="map"></div>
+    <h2>Wms Image</h2>
+    <img src="" alt="this is image" srcset="" id="wmsImage" />
   </body>
 </html>
 
@@ -49,20 +51,42 @@
   };
 
   osmLayer.addTo(map1);
+  console.log(map1);
 
-  a = L.Geoserver.wms("http://203.159.29.40:8080/geoserver/tajikistan/wms", {
+  a = L.Geoserver.wms("http://203.159.29.40:8080/geoserver/wms", {
     layers: `tajikistan:EAR_Road`,
-  }).addTo(map1);
+    // bbox: [-180, -90, 180, 90],
+    // bbox: [67.47830527, 37.45951411, 72.28612416, 40.79275385],
+  });
+  console.log(a);
 
-  a = L.Geoserver.wfs("http://203.159.29.40:8080/geoserver/tajikistan/wms", {
-    layers: `tajikistan:jamoat`,
-    // popup: false,
-    style: { color: "black" },
-    // onEachLayer: function (feature, layer) {
-    //   layer.bindPopup("this is popuped");
-    // },
-    // fitlayer: false,
-  }).addTo(map1);
+  a.addTo(map1);
+
+  var aaa = L.Geoserver.wmsImage(
+    "http://203.159.29.40:8080/geoserver/tajikistan/wms",
+    {
+      wmsLayers: [
+        "tajikistan:jamoat",
+        "tajikistan:EAR_Agriculture",
+        "tajikistan:jamoat",
+      ],
+      wmsCQL_FILTER: ["district_eng=='Ayni'", "tajikistan:jamoat", "INCLUDE"],
+      wmsStyle: [
+        "tajikistan:cql_boundary",
+        "tajikistan:EAR_Agriculture",
+        "tajikistan:cql_boundary",
+      ],
+      format: "image/png",
+      wmsId: "wmsImage",
+      width: 300,
+      height: 300,
+      transparent: true,
+      // onEachFeature: function (feature, layer) {
+      //   layer.bindPopup("this is popuped");
+      // },
+      // fitlayer: false,
+    }
+  );
 
   a = L.Geoserver.legend("http://203.159.29.40:8080/geoserver/", {
     layers: `tajikistan:jamoat`,
@@ -71,27 +95,12 @@
 
   a.addTo(map1);
 
-  //legend handler
-  // function handleLegend(value) {
-  // let legendURL = `http://203.159.29.40:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.1.0&FORMAT=image/png&LAYER=tajikistan:${value}`;
-  // $('.legend').show();
-  // let legendImg = `<img src='${legendURL}' class='${value}' alt='legend'>`;
-  // let name = $(`.legend-body .${value}`)
-  // $('.legend-body').append(legendImg)
-
-  //Legend
-  //   legend = L.control({ position: "bottomleft" });
-  //   legend.onAdd = function (map) {
-  //     var div = L.DomUtil.create("div", "info Legend");
-  //     var url = `http://203.159.29.40:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.1.0&FORMAT=image/png&LAYER=tajikistan:${value}`;
-  //     div.innerHTML +=
-  //       "<img src=" +
-  //       url +
-  //       ' alt="legend" data-toggle="tooltip" title="Map legend">';
-  //     return div;
-  //   };
-  //   legend.addTo(map1);
-  // }
-
-  // handleLegend("EAR_Agriculture");
+  map1.on("click", function (e) {
+    var coord = e.latlng;
+    var lat = coord.lat;
+    var lng = coord.lng;
+    console.log(
+      "You clicked the map at latitude: " + lat + " and longitude: " + lng
+    );
+  });
 </script>
