@@ -1,4 +1,5 @@
 L.Geoserver = L.FeatureGroup.extend({
+  //Some of the default options
   options: {
     layers: "",
     format: "image/png",
@@ -12,8 +13,14 @@ L.Geoserver = L.FeatureGroup.extend({
     popup: true,
     style: "",
     onEachFeature: function (feature, layer) {},
+    wmsLayers: [],
+    wmsCQL_FILTER: [],
+    wmsStyle: [],
+    width: 500,
+    height: 500,
   },
 
+  // constructor function
   initialize: function (baseLayerUrl, options) {
     this.baseLayerUrl = baseLayerUrl;
 
@@ -26,10 +33,13 @@ L.Geoserver = L.FeatureGroup.extend({
     };
   },
 
+  //wms layer function
   wms: function () {
     return L.tileLayer.wms(this.baseLayerUrl, this.options);
   },
 
+  //wfs layer fetching function
+  //Note this function will work only for vector layer
   wfs: function () {
     var that = this;
 
@@ -109,7 +119,7 @@ L.Geoserver = L.FeatureGroup.extend({
   wmsImage: function () {
     var that = this;
     $.ajax({
-      url: `${that.baseLayerUrl}/ows?service=WFS&version=1.0.0&request=GetFeature&cql_filter=${that.options.CQL_FILTER}&typeName=${that.options.layers}&srsName=EPSG:4326&maxFeatures=50&outputFormat=text%2Fjavascript`,
+      url: `${that.baseLayerUrl}/ows?service=WFS&version=1.0.0&request=GetFeature&cql_filter=${that.options.wmsCQL_FILTER[0]}&typeName=${that.options.wmsLayers[0]}&srsName=EPSG:4326&maxFeatures=50&outputFormat=text%2Fjavascript`,
       dataType: "jsonp",
       jsonpCallback: "parseResponse",
       success: function (data) {
@@ -122,25 +132,34 @@ L.Geoserver = L.FeatureGroup.extend({
         bufferBbox = Math.min((bboxX2 - bboxX1) * 0.1, (bboxY2 - bboxY1) * 0.1);
         maxValue = Math.max(bboxX2 - bboxX1, bboxY2 - bboxY1) / 2.0;
 
-        var a = L.tileLayer.wms(that.baseLayerUrl, {
-          ...that.options,
+        var otherLayers = "";
+        var otherStyle = "";
+        for (var i = 1; i < that.options.wmsLayers.length; i++) {
+          otherLayers += that.options.wmsLayers[i];
+          // console.log(otherLayers);
+          otherStyle += that.options.wmsStyle[i];
+          console.log(that.options.wmsLayers.length);
+          if (i != that.options.wmsLayers.length - 1) {
+            otherLayers += ",";
+            otherStyle += ",";
+          }
+        }
 
-          bbox: [
-            (bboxX1 + bboxX2) * 0.5 - maxValue - bufferBbox,
-            (bboxY1 + bboxY2) * 0.5 - maxValue - bufferBbox,
-            (bboxX1 + bboxX2) * 0.5 + maxValue + bufferBbox,
-            (bboxY1 + bboxY2) * 0.5 + maxValue + bufferBbox,
-          ],
-        });
-        console.log(a);
-        that.addLayer(a);
-        console.log(that.addLayer(a));
+        var wmsLayerURL = `http://203.159.29.40:8080/geoserver/tajikistan/wms?service=WMS&version=1.1.0&request=GetMap&\
+layers=${otherLayers}&\
+bbox=${(bboxX1 + bboxX2) * 0.5 - maxValue - bufferBbox},${
+          (bboxY1 + bboxY2) * 0.5 - maxValue - bufferBbox
+        },${(bboxX1 + bboxX2) * 0.5 + maxValue + bufferBbox},${
+          (bboxY1 + bboxY2) * 0.5 + maxValue + bufferBbox
+        }&\
+width=${that.options.width}&\
+height=${that.options.height}&\
+srs=EPSG%3A4326&\
+format=image/png`;
+        $(`#${that.options.wmsId}`).attr("src", wmsLayerURL);
+        return that;
       },
     });
-    for (var layer in that._layers) {
-      console.log(layer);
-    }
-    console.log(that);
     return that;
   },
 });
