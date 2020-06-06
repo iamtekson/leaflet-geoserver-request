@@ -63,7 +63,7 @@ L.Geoserver = L.FeatureGroup.extend({
       success: function (data) {
         var layers = [];
 
-        console.log(that.options.onEachFeature);
+        // push all the layers to the layers array
         for (i = 0; i < data.features.length; i++) {
           var layer = L.GeoJSON.geometryToLayer(
             data.features[i],
@@ -78,8 +78,8 @@ L.Geoserver = L.FeatureGroup.extend({
 
           layers.push(layer);
         }
-        console.log(that.options.onEachFeature);
 
+        // for adding styles to the geojson feature
         if (typeof that.options.style === "function") {
           for (i = 0; i < layers.length; i++) {
             that.addLayer(layers[i]);
@@ -101,6 +101,7 @@ L.Geoserver = L.FeatureGroup.extend({
     return that;
   },
 
+  //Legend of the map
   legend: function () {
     var that = this;
     var legend = L.control({ position: "bottomleft" });
@@ -116,6 +117,7 @@ L.Geoserver = L.FeatureGroup.extend({
     return legend;
   },
 
+  //This function is used for zooming the raster layer using specific vector data
   wmsImage: function () {
     var that = this;
     $.ajax({
@@ -123,6 +125,7 @@ L.Geoserver = L.FeatureGroup.extend({
       dataType: "jsonp",
       jsonpCallback: "parseResponse",
       success: function (data) {
+        // bounding box for the selected vector layer
         selectedArea = L.geoJson(data);
         bboxX1 = selectedArea.getBounds()._southWest.lng;
         bboxX2 = selectedArea.getBounds()._northEast.lng;
@@ -136,15 +139,14 @@ L.Geoserver = L.FeatureGroup.extend({
         var otherStyle = "";
         for (var i = 1; i < that.options.wmsLayers.length; i++) {
           otherLayers += that.options.wmsLayers[i];
-          // console.log(otherLayers);
           otherStyle += that.options.wmsStyle[i];
-          console.log(that.options.wmsLayers.length);
           if (i != that.options.wmsLayers.length - 1) {
             otherLayers += ",";
             otherStyle += ",";
           }
         }
 
+        //final wmsLayerUrl
         var wmsLayerURL = `http://203.159.29.40:8080/geoserver/tajikistan/wms?service=WMS&version=1.1.0&request=GetMap&\
 layers=${otherLayers}&\
 bbox=${(bboxX1 + bboxX2) * 0.5 - maxValue - bufferBbox},${
