@@ -49,20 +49,24 @@
   };
 
   osmLayer.addTo(map1);
+  console.log(map1);
 
-  a = L.Geoserver.wms("http://203.159.29.40:8080/geoserver/tajikistan/wms", {
+  a = L.Geoserver.wms("http://203.159.29.40:8080/geoserver/wms", {
     layers: `tajikistan:EAR_Road`,
-  }).addTo(map1);
+  });
+
+  a.addTo(map1);
 
   a = L.Geoserver.wfs("http://203.159.29.40:8080/geoserver/tajikistan/wms", {
     layers: `tajikistan:jamoat`,
     // popup: false,
     style: { color: "black" },
-    // onEachLayer: function (feature, layer) {
-    //   layer.bindPopup("this is popuped");
-    // },
+    onEachFeature: function (feature, layer) {
+      layer.bindPopup("this is popuped");
+    },
     // fitlayer: false,
-  }).addTo(map1);
+  });
+  a.addTo(map1);
 
   a = L.Geoserver.legend("http://203.159.29.40:8080/geoserver/", {
     layers: `tajikistan:jamoat`,
@@ -71,27 +75,12 @@
 
   a.addTo(map1);
 
-  //legend handler
-  // function handleLegend(value) {
-  // let legendURL = `http://203.159.29.40:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.1.0&FORMAT=image/png&LAYER=tajikistan:${value}`;
-  // $('.legend').show();
-  // let legendImg = `<img src='${legendURL}' class='${value}' alt='legend'>`;
-  // let name = $(`.legend-body .${value}`)
-  // $('.legend-body').append(legendImg)
-
-  //Legend
-  //   legend = L.control({ position: "bottomleft" });
-  //   legend.onAdd = function (map) {
-  //     var div = L.DomUtil.create("div", "info Legend");
-  //     var url = `http://203.159.29.40:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.1.0&FORMAT=image/png&LAYER=tajikistan:${value}`;
-  //     div.innerHTML +=
-  //       "<img src=" +
-  //       url +
-  //       ' alt="legend" data-toggle="tooltip" title="Map legend">';
-  //     return div;
-  //   };
-  //   legend.addTo(map1);
-  // }
-
-  // handleLegend("EAR_Agriculture");
+  map1.on("click", function (e) {
+    var coord = e.latlng;
+    var lat = coord.lat;
+    var lng = coord.lng;
+    console.log(
+      "You clicked the map at latitude: " + lat + " and longitude: " + lng
+    );
+  });
 </script>

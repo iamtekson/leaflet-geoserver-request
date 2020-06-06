@@ -11,6 +11,7 @@ L.Geoserver = L.FeatureGroup.extend({
     fitlayer: true,
     popup: true,
     style: "",
+    onEachFeature: function (feature, layer) {},
   },
 
   initialize: function (baseLayerUrl, options) {
@@ -52,6 +53,7 @@ L.Geoserver = L.FeatureGroup.extend({
       success: function (data) {
         var layers = [];
 
+        console.log(that.options.onEachFeature);
         for (i = 0; i < data.features.length; i++) {
           var layer = L.GeoJSON.geometryToLayer(
             data.features[i],
@@ -59,8 +61,14 @@ L.Geoserver = L.FeatureGroup.extend({
           );
 
           layer.feature = data.features[i];
+          layer.options.onEachFeature = that.options.onEachFeature(
+            layer.feature,
+            layer
+          );
+
           layers.push(layer);
         }
+        console.log(that.options.onEachFeature);
 
         if (typeof that.options.style === "function") {
           for (i = 0; i < layers.length; i++) {
@@ -97,6 +105,44 @@ L.Geoserver = L.FeatureGroup.extend({
     };
     return legend;
   },
+
+  wmsImage: function () {
+    var that = this;
+    $.ajax({
+      url: `${that.baseLayerUrl}/ows?service=WFS&version=1.0.0&request=GetFeature&cql_filter=${that.options.CQL_FILTER}&typeName=${that.options.layers}&srsName=EPSG:4326&maxFeatures=50&outputFormat=text%2Fjavascript`,
+      dataType: "jsonp",
+      jsonpCallback: "parseResponse",
+      success: function (data) {
+        selectedArea = L.geoJson(data);
+        bboxX1 = selectedArea.getBounds()._southWest.lng;
+        bboxX2 = selectedArea.getBounds()._northEast.lng;
+        bboxY1 = selectedArea.getBounds()._southWest.lat;
+        bboxY2 = selectedArea.getBounds()._northEast.lat;
+        bboxList = [bboxX1, bboxX2, bboxY1, bboxY2];
+        bufferBbox = Math.min((bboxX2 - bboxX1) * 0.1, (bboxY2 - bboxY1) * 0.1);
+        maxValue = Math.max(bboxX2 - bboxX1, bboxY2 - bboxY1) / 2.0;
+
+        var a = L.tileLayer.wms(that.baseLayerUrl, {
+          ...that.options,
+
+          bbox: [
+            (bboxX1 + bboxX2) * 0.5 - maxValue - bufferBbox,
+            (bboxY1 + bboxY2) * 0.5 - maxValue - bufferBbox,
+            (bboxX1 + bboxX2) * 0.5 + maxValue + bufferBbox,
+            (bboxY1 + bboxY2) * 0.5 + maxValue + bufferBbox,
+          ],
+        });
+        console.log(a);
+        that.addLayer(a);
+        console.log(that.addLayer(a));
+      },
+    });
+    for (var layer in that._layers) {
+      console.log(layer);
+    }
+    console.log(that);
+    return that;
+  },
 });
 
 L.Geoserver.wms = function (baseLayerUrl, options) {
@@ -114,27 +160,7 @@ L.Geoserver.legend = function (baseLayerUrl, options) {
   return req.legend();
 };
 
-// handleJson: function (data) {
-//   console.log(data);
-//   var layer = this.options.popup
-//     ? L.geoJson(data, {
-//         style: this.options.style,
-//         onEachFeature: function (feature, layer) {
-//           layer.bindPopup(
-//             "<pre>" +
-//               JSON.stringify(feature.properties, null, " ").replace(
-//                 /[\{\}"]/g,
-//                 ""
-//               ) +
-//               "</pre>"
-//           );
-//         },
-//       })
-//     : L.geoJson(data);
-
-//   console.log(layer);
-//   layer.addTo(map1);
-//   if (this.options.fitlayer) {
-//     map.fitBounds(this.selectedArea.getBounds());
-//   }
-// },
+L.Geoserver.wmsImage = function (baseLayerUrl, options) {
+  var req = new L.Geoserver(baseLayerUrl, options);
+  return req.wmsImage();
+};
