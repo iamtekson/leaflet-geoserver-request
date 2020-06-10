@@ -95,6 +95,12 @@
 
   a.addTo(map1);
 
+  aa = L.Geoserver.wfs("http://203.159.29.40:8080/geoserver/wms", {
+    layers: `tajikistan:jamoat`,
+    // style: `tajikistan:region`,
+  });
+  aa.addTo(map1);
+
   map1.on("click", function (e) {
     var coord = e.latlng;
     var lat = coord.lat;
