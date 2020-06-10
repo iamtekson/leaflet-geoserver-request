@@ -4,34 +4,35 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- leaflet css and js  -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
     />
-    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
 
-    <title>Geoserver</title>
+    <title>L.Geoserver</title>
 
     <style>
       #map {
         width: 100%;
-        height: 100vh;
+        height: 50vh;
       }
     </style>
   </head>
   <body>
+    <h1>Leaflet L.GeoServer Plugin</h1>
     <div id="map"></div>
+    <a href="https://github.com/iamtekson/l.geoserver"
+      ><img style="position: fixed; top: 0; right: 0; border: 0; z-index: 1000;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a></a>
     <h2>Wms Image</h2>
     <img src="" alt="this is image" srcset="" id="wmsImage" />
   </body>
 </html>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
 <script src="../src/L.Geoserver.js"></script>
 
 <script>
-  var map1 = L.map("map").setView([38.861, 71.2761], 7);
+  var map = L.map("map").setView([38.861, 71.2761], 7);
   var osmLayer = L.tileLayer(
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     {
@@ -39,30 +40,38 @@
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }
-  );
+  ).addTo(map);
 
-  var options = {
-    layers: `tajikistan:EAR_Agriculture`,
-    format: "image/png",
-    transparent: true,
-    zIndex: 1000,
-    version: "1.1.0",
-    attribution: `layer`,
-  };
-
-  osmLayer.addTo(map1);
-  console.log(map1);
-
-  a = L.Geoserver.wms("http://203.159.29.40:8080/geoserver/wms", {
+  //wms
+  var wms = L.Geoserver.wms("http://203.159.29.40:8080/geoserver/wms", {
     layers: `tajikistan:EAR_Road`,
-    // bbox: [-180, -90, 180, 90],
-    // bbox: [67.47830527, 37.45951411, 72.28612416, 40.79275385],
   });
-  console.log(a);
+  wms.addTo(map);
 
-  a.addTo(map1);
+  //wfs
+  var wfs = L.Geoserver.wfs("http://203.159.29.40:8080/geoserver/wms", {
+    layers: `tajikistan:jamoat`,
+    style: {
+      color: "red",
+      fillOpacity: 0,
+      opacity: 1,
+    },
+    onEachFeature: function (feature, layer) {
+      layer.bindPopup("popup text");
+    },
+    CQL_FILTER: `name_rg=='DRS'`,
+  });
+  wfs.addTo(map);
 
-  var aaa = L.Geoserver.wmsImage(
+  //legend
+  var legend = L.Geoserver.legend("http://203.159.29.40:8080/geoserver/wms", {
+    layers: `tajikistan:jamoat`,
+    style: `tajikistan:region`,
+  });
+  legend.addTo(map);
+
+  //wmsImage
+  var wmsImage = L.Geoserver.wmsImage(
     "http://203.159.29.40:8080/geoserver/tajikistan/wms",
     {
       wmsLayers: [
@@ -81,32 +90,6 @@
       width: 300,
       height: 300,
       transparent: true,
-      // onEachFeature: function (feature, layer) {
-      //   layer.bindPopup("this is popuped");
-      // },
-      // fitlayer: false,
     }
   );
-
-  a = L.Geoserver.legend("http://203.159.29.40:8080/geoserver/", {
-    layers: `tajikistan:jamoat`,
-    style: `tajikistan:region`,
-  });
-
-  a.addTo(map1);
-
-  aa = L.Geoserver.wfs("http://203.159.29.40:8080/geoserver/wms", {
-    layers: `tajikistan:jamoat`,
-    // style: `tajikistan:region`,
-  });
-  aa.addTo(map1);
-
-  map1.on("click", function (e) {
-    var coord = e.latlng;
-    var lat = coord.lat;
-    var lng = coord.lng;
-    console.log(
-      "You clicked the map at latitude: " + lat + " and longitude: " + lng
-    );
-  });
 </script>
