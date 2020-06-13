@@ -67,6 +67,7 @@ wfsLayer.addTo(map);
 | style         | js object/function | null      | The style file can be in form of javascript oject or function. eg `style = {color: "black",fillOpacity: "0", opacity: "0.5" }                   |
 | onEachFeature | function           | null      | Common region to add this feature is to add popup when the layer cicked. [more detail](https://leafletjs.com/examples/geojson/)                 |
 | CQL_FILTER    | string             | INCLUDE   | To filter the layer based on their attribute. [read more about this](https://docs.geoserver.org/latest/en/user/tutorials/cql/cql_tutorial.html) |
+| fitLayer      | boolean            | true      | The map automatically zoomed into the loaded data region                                                                                        |
 
 ### Web-Mapping-Service-Image (WMSImage) request
 

@@ -9,8 +9,7 @@ L.Geoserver = L.FeatureGroup.extend({
     version: "1.1.0",
     srsname: "EPSG:4326",
     attribution: `layer`,
-    fitlayer: true,
-    popup: true,
+    fitLayer: true,
     style: "",
     onEachFeature: function (feature, layer) {},
     wmsLayers: [],
@@ -93,6 +92,10 @@ L.Geoserver = L.FeatureGroup.extend({
             that.setStyle(that.options.style);
           }
         }
+
+        if (that.options.fitLayer) {
+          that._map.fitBounds(that.getBounds());
+        }
       },
     }).fail(function (jqXHR, textStatus, error) {
       console.log(jqXHR, textStatus, error);
@@ -147,7 +150,9 @@ L.Geoserver = L.FeatureGroup.extend({
         }
 
         //final wmsLayerUrl
-        var wmsLayerURL = `http://203.159.29.40:8080/geoserver/tajikistan/wms?service=WMS&version=1.1.0&request=GetMap&\
+        var wmsLayerURL = `${
+          that.baseLayerUrl
+        }/wms?service=WMS&version=1.1.0&request=GetMap&\
 layers=${otherLayers}&\
 bbox=${(bboxX1 + bboxX2) * 0.5 - maxValue - bufferBbox},${
           (bboxY1 + bboxY2) * 0.5 - maxValue - bufferBbox
