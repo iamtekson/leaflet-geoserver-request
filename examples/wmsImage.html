@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+    />    
+    <title>WMSImage-L.Geoserver</title>
+    <style>
+      #wmsImage {
+        padding: 30px;
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+
+  <body>
+    <a href="https://github.com/iamtekson/l.geoserver"
+      ><img style="position: fixed; top: 0; right: 0; border: 0; z-index: 1000;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a></a>
+    
+    <div class="wmsimage">
+      <h2>Wms Image</h2>
+      <img src="" alt="this is image" srcset="" id="wmsImage" />
+    </div>
+      
+  </body>
+</html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+<script src="../src/L.Geoserver.js"></script>
+
+<script>
+  //wmsImage
+  var wmsImage = L.Geoserver.wmsImage(
+    "http://tajirisk.ait.ac.th:8080/geoserver/tajikistan/wms",
+    {
+      wmsLayers: [
+        "tajikistan:jamoat",
+        "tajikistan:EAR_Agriculture",
+        "tajikistan:district",
+      ],
+      wmsCQL_FILTER: ["name_rg='Khatlon'", "INCLUDE", "name_rg=='Khatlon'"],
+      wmsStyle: [
+        "INCLUDE",
+        "tajikistan:EAR_Agriculture",
+        "tajikistan:cql_boundary",
+      ],
+      format: "image/png",
+      wmsId: "wmsImage",
+      width: 600,
+      height: 600,
+      transparent: true,
+    }
+  );
+</script>
+
+
+

@@ -9,8 +9,7 @@ L.Geoserver = L.FeatureGroup.extend({
     version: "1.1.0",
     srsname: "EPSG:4326",
     attribution: `layer`,
-    fitlayer: true,
-    popup: true,
+    fitLayer: true,
     style: "",
     onEachFeature: function (feature, layer) {},
     wmsLayers: [],
@@ -93,6 +92,10 @@ L.Geoserver = L.FeatureGroup.extend({
             that.setStyle(that.options.style);
           }
         }
+
+        if (that.options.fitLayer) {
+          that._map.fitBounds(that.getBounds());
+        }
       },
     }).fail(function (jqXHR, textStatus, error) {
       console.log(jqXHR, textStatus, error);
@@ -137,18 +140,25 @@ L.Geoserver = L.FeatureGroup.extend({
 
         var otherLayers = "";
         var otherStyle = "";
+        var otherCqlFilter = "";
         for (var i = 1; i < that.options.wmsLayers.length; i++) {
           otherLayers += that.options.wmsLayers[i];
           otherStyle += that.options.wmsStyle[i];
+          otherCqlFilter +=that.options.wmsCQL_FILTER[i];
           if (i != that.options.wmsLayers.length - 1) {
             otherLayers += ",";
             otherStyle += ",";
+            otherCqlFilter += ';';
           }
         }
 
         //final wmsLayerUrl
-        var wmsLayerURL = `http://203.159.29.40:8080/geoserver/tajikistan/wms?service=WMS&version=1.1.0&request=GetMap&\
+        var wmsLayerURL = `${
+          that.baseLayerUrl
+        }/wms?service=WMS&version=1.1.0&request=GetMap&\
 layers=${otherLayers}&\
+styles=${otherStyle}&\
+cql_filter=${otherCqlFilter}&\
 bbox=${(bboxX1 + bboxX2) * 0.5 - maxValue - bufferBbox},${
           (bboxY1 + bboxY2) * 0.5 - maxValue - bufferBbox
         },${(bboxX1 + bboxX2) * 0.5 + maxValue + bufferBbox},${
