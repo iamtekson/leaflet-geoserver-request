@@ -2,8 +2,7 @@
 [![Build Status](https://travis-ci.org/iamtekson/L.Geoserver.svg?branch=master)](https://travis-ci.org/iamtekson/L.Geoserver)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/iamtekson/L.Geoserver)
 ![GitHub file size in bytes](https://img.shields.io/github/size/iamtekson/L.Geoserver/src/L.Geoserver.js)
-[![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
-[![GitHub stars](https://img.shields.io/github/stars/iamtekson/L.Geoserver)](https://github.com/iamtekson/L.Geoserver/stargazers)
+![NPM](https://img.shields.io/npm/l/leaflet-geoserver-request)
 [![GitHub issues](https://img.shields.io/github/issues/iamtekson/L.Geoserver)](https://github.com/iamtekson/L.Geoserver/issues)
 
 This is the plugin for Geoserver various kind of requests. Using this plugin, we can make WMS, WFS, getLegendGraphic, WMS-Image request. [demo](https://iamtekson.github.io/L.Geoserver/examples/maps.html)
