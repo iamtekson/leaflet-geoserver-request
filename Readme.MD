@@ -1,4 +1,7 @@
 # Documentation leaflet-geoserver-request
+[![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
+[![GitHub stars](https://img.shields.io/github/stars/iamtekson/L.Geoserver)](https://github.com/iamtekson/L.Geoserver/stargazers)
+[![GitHub issues](https://img.shields.io/github/issues/iamtekson/L.Geoserver)](https://github.com/iamtekson/L.Geoserver/issues)
 
 This is the plugin for Geoserver various kind of requests. Using this plugin, we can make WMS, WFS, getLegendGraphic, WMS-Image request. [demo](https://iamtekson.github.io/L.Geoserver/examples/maps.html)
 
