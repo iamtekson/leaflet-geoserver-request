@@ -1,15 +1,22 @@
 {
-  "name": "leaflet-plugin",
+  "name": "L.Geoserver",
   "version": "1.0.0",
-  "description": "",
+  "description": "This is the library for various kind of request from geoserver to leaflet",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iamtekson/L.Geoserver.git"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "geoserver",
     "wms",
-    "wfs"
+    "wfs",
+    "legend",
+    "wmsImage",
+    "leaflet"
   ],
   "author": "iamtekson",
   "license": "ISC",
