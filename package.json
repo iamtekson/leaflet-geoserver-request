@@ -7,9 +7,6 @@
     "type": "git",
     "url": "git+https://github.com/iamtekson/L.Geoserver.git"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "keywords": [
     "geoserver",
     "wms",
