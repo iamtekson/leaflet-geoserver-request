@@ -1,18 +1,19 @@
-# Documentation L.Geoserver
+# Documentation leaflet-geoserver-request
 
-This is the plugin for Geoserver various kind of requests. Using this plugin, we can make WMS, WFS, getLegendGraphic, WMS-Image request.
+This is the plugin for Geoserver various kind of requests. Using this plugin, we can make WMS, WFS, getLegendGraphic, WMS-Image request. [demo](https://iamtekson.github.io/L.Geoserver/examples/maps.html)
 
 ### Installation and setup
 
 - **using NPM**:
 
 ```js
-npm install L.Geoserver
+npm install leaflet-geoserver-request
 ```
 
-- **Quick use** : Add js file to
+- **Quick use** :
 
 ```html
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="[path to js]/L.Geoserver.js"></script>
 ```
 
@@ -139,4 +140,3 @@ map.fitBounds(wfsLayerAdvance.getBounds());
 wfsLayerAdvance.addTo(map);
 ```
 
-### #Happy_Coding
