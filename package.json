@@ -1,8 +1,8 @@
 {
   "name": "leaflet-geoserver-request",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "This is the library for wms, wfs, legend, wmsImage request from geoserver to leaflet",
-  "main": "index.js",
+  "main": "src/L.Geoserver.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/iamtekson/L.Geoserver.git"
