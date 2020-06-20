@@ -63,7 +63,7 @@ L.Geoserver = L.FeatureGroup.extend({
         var layers = [];
 
         // push all the layers to the layers array
-        for (i = 0; i < data.features.length; i++) {
+        for (var i = 0; i < data.features.length; i++) {
           var layer = L.GeoJSON.geometryToLayer(
             data.features[i],
             that.options || null

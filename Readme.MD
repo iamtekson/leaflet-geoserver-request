@@ -118,12 +118,12 @@ L.Geoserver.wmsImage("http://localhost:8080/geoserver/wms", {
 The legend request will provide the crossponding legend of the layer to the bottom-left position of the map. In case of not providing style parameter, it will take the default style from GeoServer.
 
 ```js
-layerLegend = L.Geoserver.legend("http://localhost:8080/geoserver/wms", {
+var layerLegend = L.Geoserver.legend("http://localhost:8080/geoserver/wms", {
   layers: "topp:tasmania_roads",
   style: `stylefile`,
 });
 
-a.addTo(map);
+layerLegend.addTo(map);
 ```
 
 ### Advance WFS request demo
