@@ -59,7 +59,7 @@ In WFS request, you need to enable the `jsonp` for GeoServer. By default, `jsonp
 **Note:** WFS request only applicable for vector layer, not for raster
 
 ```js
-var wfsLayer = L.Geoserver.wms("http://localhost:8080/geoserver/wms", {
+var wfsLayer = L.Geoserver.wfs("http://localhost:8080/geoserver/wfs", {
   layers: "topp:tasmania_roads",
 });
 wfsLayer.addTo(map);
