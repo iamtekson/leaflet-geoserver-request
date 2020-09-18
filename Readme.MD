@@ -5,7 +5,9 @@
 ![NPM](https://img.shields.io/npm/l/leaflet-geoserver-request)
 [![GitHub issues](https://img.shields.io/github/issues/iamtekson/L.Geoserver)](https://github.com/iamtekson/L.Geoserver/issues)
 
-This is the plugin for Geoserver various kind of requests. Using this plugin, we can make WMS, WFS, getLegendGraphic, WMS-Image request. [demo](https://iamtekson.github.io/L.Geoserver/examples/maps.html)
+This is the plugin for Geoserver various kind of requests. Using this plugin, we can make WMS, WFS, getLegendGraphic, WMS-Image request. 
+
+[<h3>demo</h3>](https://iamtekson.github.io/leaflet-geoserver-request/examples/maps.html)
 
 ### Installation and setup
 
