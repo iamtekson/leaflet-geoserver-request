@@ -1,5 +1,5 @@
 # Documentation leaflet-geoserver-request
-[![Build Status](https://travis-ci.org/iamtekson/L.Geoserver.svg?branch=master)](https://travis-ci.org/iamtekson/L.Geoserver)
+[![Build Status](https://travis-ci.org/iamtekson/leaflet-geoserver-request.svg?branch=master)](https://travis-ci.org/iamtekson/leaflet-geoserver-request)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/iamtekson/L.Geoserver)
 ![GitHub file size in bytes](https://img.shields.io/github/size/iamtekson/L.Geoserver/src/L.Geoserver.js)
 ![NPM](https://img.shields.io/npm/l/leaflet-geoserver-request)
