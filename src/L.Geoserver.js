@@ -83,7 +83,7 @@ L.Geoserver = L.FeatureGroup.extend({
           for (i = 0; i < layers.length; i++) {
             that.addLayer(layers[i]);
             if (i.setStyle) {
-              i.setStyle(that.options.style(element));
+              i.setStyle(that.options.style(i.feature));
             }
           }
         } else {
