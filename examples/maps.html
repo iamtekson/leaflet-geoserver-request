@@ -9,7 +9,7 @@
       href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
     />
 
-    <title>L.Geoserver</title>
+    <title>Leaflet geoserver request</title>
 
     <style>
       html, body {
@@ -53,13 +53,13 @@
   ).addTo(map);
 
   //wms
-  var wms = L.Geoserver.wms("http://tajirisk.ait.ac.th:8080/geoserver/wms", {
+  var wms = L.Geoserver.wms("http://riskinfo.tj/geoserver/wms", {
     layers: `tajikistan:EAR_Builtup`,
   });
   wms.addTo(map);
 
   //wfs
-  var wfs = L.Geoserver.wfs("http://tajirisk.ait.ac.th:8080/geoserver/wms", {
+  var wfs = L.Geoserver.wfs("http://riskinfo.tj/geoserver/wms", {
     layers: `tajikistan:jamoat`,
     style: {
       color: "red",
@@ -75,7 +75,7 @@
   wfs.addTo(map)
 
   //legend
-  var legend = L.Geoserver.legend("http://tajirisk.ait.ac.th:8080/geoserver/wms", {
+  var legend = L.Geoserver.legend("http://riskinfo.tj/geoserver/wms", {
     layers: `tajikistan:EAR_Builtup`,
   });
   legend.addTo(map);
