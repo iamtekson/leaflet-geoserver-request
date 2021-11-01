@@ -8,6 +8,10 @@ This is the plugin for Geoserver various kind of requests. Using this plugin, we
 
 [<h3>demo</h3>](https://iamtekson.github.io/leaflet-geoserver-request/examples/maps.html)
 
+### Video tutorial
+
+[![Youtube link](http://i3.ytimg.com/vi/fdUpaWd6I_Y/hqdefault.jpg)](https://youtu.be/fdUpaWd6I_Y)
+
 ### Installation and setup
 
 - **using NPM**:
