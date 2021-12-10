@@ -1,0 +1,9 @@
+cff-version: 1.1.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Kshetri
+    given-names: Tek
+    orcid: https://orcid.org/0000-0001-9275-5619
+title: iamtekson/leaflet-geoserver-request: V1.2.2
+version: v1.2.2
+date-released: 2017-12-18
