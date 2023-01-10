@@ -168,7 +168,7 @@ Also you can appreciate by
 </td>
 
   <td style="margin: 10px">
-<a href="https://paypal.me/iamtekson"><img src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-200px.png" alt="PayPal Logo"
+<a href="https://paypal.me/tekcalgary"><img src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-200px.png" alt="PayPal Logo"
 style="max-width:90%;" width="200" height="60">
  </td>
  </tr>
