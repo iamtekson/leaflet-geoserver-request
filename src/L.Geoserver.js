@@ -59,7 +59,7 @@ L.Geoserver = L.FeatureGroup.extend({
         version: this.options.version,
         request: "GetFeature",
         typename: this.options.layers,
-        CQL_FILTER: this.options.filter,
+        CQL_FILTER: this.options.CQL_FILTER,
         srsname: this.options.srsname,
         outputFormat: "text/javascript",
         format_options: "callback: getJson",
