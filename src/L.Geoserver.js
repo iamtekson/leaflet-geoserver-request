@@ -6,7 +6,7 @@ L.Geoserver = L.FeatureGroup.extend({
     transparent: true,
     CQL_FILTER: "INCLUDE",
     zIndex: 1000,
-    version: ["1.1.1","1.3.0"],
+    version: "",
     srsname: "EPSG:4326",
     attribution: `layer`,
     fitLayer: true,
