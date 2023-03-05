@@ -6,7 +6,7 @@ L.Geoserver = L.FeatureGroup.extend({
     transparent: true,
     CQL_FILTER: "INCLUDE",
     zIndex: 1000,
-    version: "1.3.0",
+    version: ["1.1.1","1.3.0"],
     srsname: "EPSG:4326",
     attribution: `layer`,
     fitLayer: true,
@@ -34,6 +34,11 @@ L.Geoserver = L.FeatureGroup.extend({
 
   //wms layer function
   wms: function () {
+    
+    if (!this.options.version) {
+      this.options.version = '1.1.1';
+    }
+
     return L.tileLayer.wms(this.baseLayerUrl, this.options);
   },
 
@@ -42,16 +47,19 @@ L.Geoserver = L.FeatureGroup.extend({
   wfs: function () {
     var that = this;
 
+    if (!this.options.version) {
+      this.options.version = '1.1.0';
+    }
     //Geoserver Web Feature Service
     $.ajax(this.baseLayerUrl, {
       type: "GET",
 
       data: {
         service: "WFS",
-        version: "2.0.0",
+        version: this.options.version,
         request: "GetFeature",
         typename: this.options.layers,
-        CQL_FILTER: this.options.CQL_FILTER,
+        CQL_FILTER: this.options.filter,
         srsname: this.options.srsname,
         outputFormat: "text/javascript",
         format_options: "callback: getJson",
@@ -111,7 +119,7 @@ L.Geoserver = L.FeatureGroup.extend({
     var legend = L.control({ position: "bottomleft" });
     legend.onAdd = function (map) {
       var div = L.DomUtil.create("div", "info Legend");
-      var url = `${that.baseLayerUrl}/wms?REQUEST=GetLegendGraphic&VERSION=1.3.0&FORMAT=image/png&LAYER=${that.options.layers}&style=${that.options.style}`;
+      var url = `${that.baseLayerUrl}/wms?REQUEST=GetLegendGraphic&VERSION=${that.options.version}&FORMAT=image/png&LAYER=${that.options.layers}&style=${that.options.style}`;
       div.innerHTML +=
         "<img src=" +
         url +
@@ -125,7 +133,7 @@ L.Geoserver = L.FeatureGroup.extend({
   wmsImage: function () {
     var that = this;
     $.ajax({
-      url: `${that.baseLayerUrl}/ows?service=WFS&version=2.0.0&request=GetFeature&cql_filter=${that.options.wmsCQL_FILTER[0]}&typeName=${that.options.wmsLayers[0]}&srsName=EPSG:4326&maxFeatures=50&outputFormat=text%2Fjavascript`,
+      url: `${that.baseLayerUrl}/ows?service=WFS&version=${that.options.version}&request=GetFeature&cql_filter=${that.options.wmsCQL_FILTER[0]}&typeName=${that.options.wmsLayers[0]}&srsName=EPSG:4326&maxFeatures=50&outputFormat=text%2Fjavascript`,
       dataType: "jsonp",
       jsonpCallback: "parseResponse",
       success: function (data) {
