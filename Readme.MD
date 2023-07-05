@@ -12,7 +12,7 @@ This is the plugin for Geoserver various kind of requests. Using this plugin, we
 
 ### Video tutorial
 
-[![](https://markdown-videos.vercel.app/youtube/fdUpaWd6I_Y)](https://youtu.be/fdUpaWd6I_Y)
+[![Youtube Video](https://markdown-videos.vercel.app/youtube/fdUpaWd6I_Y)](https://youtu.be/fdUpaWd6I_Y)
 
 ### Installation and setup
 
